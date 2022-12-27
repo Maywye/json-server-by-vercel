@@ -3,14 +3,11 @@ const jsonServer = require('json-server')
 const jsonServerAuth = require('json-server-auth')
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
-const middlewares = jsonServer.defaults()
 
-server.use(middlewares)
-// Add this before server.use(router)
-server.use(jsonServer.rewriter({
-    '/api/*': '/$1',
-    '/blog/:resource/:id/show': '/:resource/:id'
-}))
+// /!\ Bind the router db to the app
+server.db = router.db
+
+
 server.use(jsonServerAuth)
 server.use(router)
 server.listen(3000, () => {
